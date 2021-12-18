@@ -1,35 +1,35 @@
 import React from 'react'
 
-const Header = (props) => (
+const Header = ({ course }) => (
   <div>
     <h1>
-      {props.course}
+      {course}
     </h1>
   </div>
 )
 
-const Total = (props) => (
+const Total = ({ parts }) => (
   <div>
     <p>
-      Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}
+      Number of exercises {parts[0].exercises + parts[1].exercises + parts[2].exercises}
     </p>
   </div>
 )
 
-const Part = (props) => (
+const Part = ({ part }) => (
   <div>
     <p>
-      {props.parts.name} {props.parts.exercises}
+      {part.name} {part.exercises}
     </p>
   </div>
 )
 
-const Content = (props) => {
+const Content = ({ parts }) => {
   return (
     <div>
-      <Part parts={props.parts[0]} />
-      <Part parts={props.parts[1]} />
-      <Part parts={props.parts[2]} />
+      <Part part={parts[0]} />
+      <Part part={parts[1]} />
+      <Part part={parts[2]} />
     </div>
   )
 }
