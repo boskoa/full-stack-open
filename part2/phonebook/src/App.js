@@ -1,18 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Contact from './components/Contact'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import axios from 'axios'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [filteredNames, setFilteredNames] = useState(persons)
+  const [filter, setNewFilter] = useState('')
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -31,32 +35,33 @@ const App = () => {
     }
     
     setPersons(persons.concat(personObject))
-    setFilteredNames(persons.concat(personObject))
     setNewName('')
     setNewNumber('')
   }
 
   const handleNameChange = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
-  const handleFilterNames = (event) => {
-    event.target.value ?
-    setFilteredNames(persons.filter((person) =>
-      person.name.toLowerCase().includes(event.target.value.toLowerCase()))) :
-    setFilteredNames(persons)
-  }
+  const handleFilterChange = (event) => setNewFilter(event.target.value)
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter onChange={handleFilterNames} />
+      <Filter onChange={handleFilterChange} />
       <h3>Add a new</h3>
       <PersonForm newName={newName} newNumber={newNumber} addPerson={addPerson}
         handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
       <div>
-        {filteredNames.map((person) =>
-          <Contact key={person.id} person={person} />
-        )}
+        {filter ? 
+          persons.filter(person =>
+            person.name.toLowerCase()
+            .includes(filter.toLowerCase())).map((person) =>
+              <Contact key={person.id} person={person} />
+          ) :
+          persons.map((person) =>
+            <Contact key={person.id} person={person} />
+          )
+        }
       </div>
     </div>
   )

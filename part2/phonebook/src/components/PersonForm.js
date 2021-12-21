@@ -1,7 +1,6 @@
 import React from 'react'
 
 const UserInput = ({ value, onChange }) => {
-  console.log(value);
   return (
     <div>
       <input value={value} onChange={onChange} />
