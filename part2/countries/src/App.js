@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Country from './components/Country'
+import Weather from './components/Weather'
 
 const App = () => {
-  //const [country, setCountry] = useState('')
+
   const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState('')
   const [filteredCountries, setFilteredCountries] = useState([])
-
-  //const handleCountryChange = event => setCountry(event.target.value)
+  
   const handleFilterChange = event => setFilter(event.target.value)
-  /*
-  const handleFilteredCountriesChange = event => {
-    setFilteredCountries(countries.filter(country =>
-      country.name.common.toLowerCase() === filter.toLowerCase()))
-  }
-*/
+
   useEffect(() => {
     setFilteredCountries(countries.filter(country =>
       country.name.common.toLowerCase().includes(filter.toLowerCase())))
@@ -33,9 +28,13 @@ const App = () => {
       <div>
         {filteredCountries.length < 10 ?
           filteredCountries.length === 1 ?
-            <Country country={filteredCountries[0]} /> :
+            <div>
+              <Country country={filteredCountries[0]} />
+              <Weather filter={filteredCountries[0].capital} />
+            </div> :
             filteredCountries.map(member =>
-              <div key={member.name.common}>{member.name.common}</div>) :
+              <div key={member.name.common}>{member.name.common}<button onClick={() =>
+                setFilter(member.name.common)}>show</button></div>) :
           <div>Too many matches, specify another filter</div>
         }
         
