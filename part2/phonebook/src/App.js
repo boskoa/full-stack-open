@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import Contact from './components/Contact'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
-import axios from 'axios'
 import phonebookServices from './services/phonebook'
 
 const App = () => {
@@ -10,8 +9,6 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setNewFilter] = useState('')
-
-  const baseUrl = "http://localhost:3001/persons"
 
   useEffect(() => {
     phonebookServices
