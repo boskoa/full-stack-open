@@ -3,12 +3,33 @@ import Contact from './components/Contact'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import phonebookServices from './services/phonebook'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setNewFilter] = useState('')
+  const [message, setMessage] = useState({text: null, style: null})
+
+  const nStyle = {
+    color: "green",
+    border: "2px solid green",
+    borderRadius: "5px",
+    padding: "5px",
+    background: "lightgrey",
+    fontSize: "15px",
+    marginBottom: "10px"
+  }
+  const eStyle = {
+    color: "red",
+    border: "2px solid red",
+    borderRadius: "5px",
+    padding: "5px",
+    background: "lightgrey",
+    fontSize: "15px",
+    marginBottom: "10px"
+  }
 
   useEffect(() => {
     phonebookServices
@@ -39,7 +60,20 @@ Replace the old number with the new one?`)
               p
             )
           })))
+          .catch(error => {
+            setMessage({
+              text: `Information for ${i.name} has already been removed from server.`,
+              style: eStyle
+            })
+            setTimeout(() => setMessage({text: null, style: null}), 5000)
+          })
+          setMessage({
+            text: `Phone number was updated for ${i.name}`,
+            style: nStyle
+          })
+          setTimeout(() => setMessage({text: null, style: null}), 5000)
         }
+
         setNewName('')
         setNewNumber('')
         return
@@ -54,13 +88,30 @@ Replace the old number with the new one?`)
         setNewNumber('')
       }
     )
+    setMessage({
+      text: `Added ${personObject.name}`,
+      style: nStyle
+    })
+    setTimeout(() => setMessage({text: null, style: null}), 5000)
   }
 
   const removePerson = person => {
     const result = window.confirm(`Delete ${person.name}?`)
     if (result) {
       phonebookServices.removeEntry(person.id)
+      .catch(error => {
+        setMessage({
+          text: `Information for ${person.name} has already been removed from server.`,
+          style: eStyle
+        })
+        setTimeout(() => setMessage({text: null, style: null}), 5000)
+      })
       setPersons(persons.filter(p => p.id !== person.id))
+      setMessage({
+        text: `Removed ${person.name}`,
+        style: nStyle
+      })
+      setTimeout(() => setMessage({text: null, style: null}), 5000)
     }
   }
 
@@ -71,6 +122,7 @@ Replace the old number with the new one?`)
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification text={message.text} style={message.style} />
       <Filter onChange={handleFilterChange} />
       <h3>Add a new</h3>
       <PersonForm newName={newName} newNumber={newNumber} addPerson={addPerson}
