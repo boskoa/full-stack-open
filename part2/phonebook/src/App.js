@@ -86,13 +86,23 @@ Replace the old number with the new one?`)
         setPersons(persons.concat(response))
         setNewName('')
         setNewNumber('')
-      }
-    )
-    setMessage({
-      text: `Added ${personObject.name}`,
-      style: nStyle
-    })
-    setTimeout(() => setMessage({text: null, style: null}), 5000)
+      })
+      .then(() => {
+        setMessage({
+        text: `Added ${personObject.name}`,
+        style: nStyle
+        })
+        setTimeout(() => setMessage({text: null, style: null}), 5000)
+      })
+      .catch(error => {
+        if (error.response.status === 400) {
+          setMessage({
+            text: `${error.response.data.error}`,
+            style: eStyle
+          })
+          setTimeout(() => setMessage({text: null, style: null}), 5000)
+        }
+      })
   }
 
   const removePerson = person => {
