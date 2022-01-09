@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Rapid-forming giants could disrupt spiral protoplanetary discs",
+    "author": "Peter Thorley",
+    "url": "https://warwick.ac.uk/newsandevents/pressreleases/rapid-forming_giants_could",
+    "likes": 0
+}
