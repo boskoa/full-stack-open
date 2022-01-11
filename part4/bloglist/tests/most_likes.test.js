@@ -1,4 +1,4 @@
-const favoriteBlog = require('../utils/list_helper').favoriteBlog
+const mostLikes = require('../utils/list_helper').mostLikes
 
 const listOne = [
   {
@@ -44,18 +44,34 @@ const listMany = [
     likes: 10,
     __v: 0
   },
+  {
+    _id: '5a422ba71b54a676234d17fb',
+    title: 'TDD harms architecture',
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+    likes: 0,
+    __v: 0
+  },
+  {
+    _id: '5a422bc61b54a676234d17fc',
+    title: 'Type wars',
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+    likes: 2,
+    __v: 0
+  }
 ]
 
-describe('favorite blog', () => {
-  test('of empty list is none', () => {
-    expect(favoriteBlog([])).toEqual(null)
+describe('the author with most likes', () => {
+  test('in an empty list is none', () => {
+    expect(mostLikes([])).toEqual(0)
   })
 
-  test('of list with one blog is that one blog', () => {
-    expect(favoriteBlog(listOne)).toEqual(listOne[0])
+  test('in a list with one blog is the author of the only blog', () => {
+    expect(mostLikes(listOne)).toEqual({ author: 'Michael Chan', likes: 7 })
   })
 
-  test('of a list with many blogs is determined right', () => {
-    expect(favoriteBlog(listMany)).toEqual(listMany[2])
+  test('in a list with many blogs is determined right', () => {
+    expect(mostLikes(listMany)).toEqual({ author: 'Edsger W. Dijkstra', likes: 17 })
   })
 })
