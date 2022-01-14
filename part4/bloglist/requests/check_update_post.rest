@@ -1,9 +1,9 @@
-POST http://localhost:3003/api/blogs
+PUT http://localhost:3003/api/blogs/61dae6af9e4f81c117f535ba
 Content-Type: application/json
 
 {
     "title": "5 Big Web Design Predictions for 2022",
     "author": "Ben Moss",
     "url": "https://www.webdesignerdepot.com/2022/01/5-big-web-design-predictions-for-2022/",
-    "likes": 25
+    "likes": 0
 }
