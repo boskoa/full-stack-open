@@ -1,5 +1,6 @@
-PUT http://localhost:3003/api/blogs/61dae6af9e4f81c117f535ba
+PUT http://localhost:3003/api/blogs/61e6898202bfed4d4da0f1c8
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InByb2JsZW0yIiwiaWQiOiI2MWU1ZTQ2N2JkMDRkNmJkNzMyYzUzNDAiLCJpYXQiOjE2NDI0OTgzOTksImV4cCI6MTY0MjUwMTk5OX0.vWc21ZEGPpq3q7J1ruWcKygwzZUOvdPeFLMQUoaPuwo
 
 {
     "title": "5 Big Web Design Predictions for 2022",
