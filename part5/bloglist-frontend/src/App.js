@@ -9,15 +9,15 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
-  const [message, setMessage] = useState({text: null, style: null})
+  const [user, setUser] = useState('')
+  const [message, setMessage] = useState({ text: null, style: null })
 
   const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -36,15 +36,15 @@ const App = () => {
       blogService.setToken(user.token)
       setUser(user)
     } catch (exception) {
-      setMessage({text: 'Wrong username or password', style: 'error'})
+      setMessage({ text: 'Wrong username or password', style: 'error' })
       setTimeout(() => {
-        setMessage({text: null, style: null})
+        setMessage({ text: null, style: null })
       }, 5000)
     }
   }
 
   const handleLogout = () => {
-    setUser(null)
+    setUser('')
     window.localStorage.removeItem('loggedBlogappUser')
   }
 
@@ -55,16 +55,17 @@ const App = () => {
       setBlogs(blogs.concat(response))
       setMessage(
         {
-          text: `A new blog "${response.title}" by ${response.author} added.`, 
-          style: 'note'}
+          text: `A new blog "${response.title}" by ${response.author} added.`,
+          style: 'note'
+        }
       )
       setTimeout(() => {
-        setMessage({text: null, style: null})
+        setMessage({ text: null, style: null })
       }, 5000)
     } catch (exception) {
-      setMessage({text: `${exception}`, style: 'error'})
+      setMessage({ text: `${exception}`, style: 'error' })
       setTimeout(() => {
-        setMessage({text: null, style: null})
+        setMessage({ text: null, style: null })
       }, 5000)
     }
   }
@@ -74,9 +75,30 @@ const App = () => {
       await blogService.update(updatedBlog)
       setBlogs(blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog))
     } catch (exception) {
-      setMessage({text: `${exception}`, style: 'error'})
+      setMessage({ text: `${exception}`, style: 'error' })
       setTimeout(() => {
-        setMessage({text: null, style: null})
+        setMessage({ text: null, style: null })
+      }, 5000)
+    }
+  }
+
+  const handleBlogRemove = async deletedObject => {
+    try {
+      await blogService.remove(deletedObject)
+      setBlogs(blogs.filter(b => b.id !== deletedObject.id))
+      setMessage(
+        {
+          text: `Blog "${deletedObject.title}" by ${deletedObject.author} removed.`,
+          style: 'note'
+        }
+      )
+      setTimeout(() => {
+        setMessage({ text: null, style: null })
+      }, 5000)
+    } catch (exception) {
+      setMessage({ text: `${exception}`, style: 'error' })
+      setTimeout(() => {
+        setMessage({ text: null, style: null })
       }, 5000)
     }
   }
@@ -87,20 +109,27 @@ const App = () => {
       <Notification message={message} />
       {user
         ? <div>
-            <p>
-              {user.name} is logged in
-              <input type="button" value="log out" onClick={handleLogout} />
-            </p>
-            <Togglable buttonLabel="create" ref={blogFormRef}>
-              <Newblog createBlog={handleNewBlog} />
-            </Togglable>
-          </div>
-        : <Togglable buttonLabel="log in">
-            <Login handleLogin={handleLogin} />
+          <p>
+            {user.name} is logged in
+            <input type="button" value="log out" onClick={handleLogout} />
+          </p>
+          <Togglable buttonLabel="create" ref={blogFormRef}>
+            <Newblog createBlog={handleNewBlog} />
           </Togglable>
+        </div>
+        : <Togglable buttonLabel="log in">
+          <Login handleLogin={handleLogin} />
+        </Togglable>
       }
       {blogs.sort((a, b) => b.likes - a.likes)
-        .map(blog => <Blog key={blog.id} blog={blog} handleLikes={handleLikes} />)}
+        .map(blog =>
+          <Blog
+            key={blog.id}
+            blog={blog}
+            user={user}
+            handleLikes={handleLikes}
+            handleBlogRemove={handleBlogRemove}
+          />)}
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const Newblog = ({ createBlog }) => {
   const [title, setTitle] = useState('')
@@ -22,31 +23,31 @@ const Newblog = ({ createBlog }) => {
       <form onSubmit={handleNewPost}>
         <div>
           Title
-          <input 
-            type="text" 
-            autoComplete="off" 
-            name="Title" 
-            value={title} 
+          <input
+            type="text"
+            autoComplete="off"
+            name="Title"
+            value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
         <div>
           Author
-          <input 
-            type="text" 
-            autoComplete="off" 
-            name="Author" 
-            value={author} 
+          <input
+            type="text"
+            autoComplete="off"
+            name="Author"
+            value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div>
           URL
-          <input 
-            type="text" 
-            autoComplete="off" 
-            name="URL" 
-            value={url} 
+          <input
+            type="text"
+            autoComplete="off"
+            name="URL"
+            value={url}
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
@@ -54,6 +55,10 @@ const Newblog = ({ createBlog }) => {
       </form>
     </div>
   )
+}
+
+Newblog.propTypes = {
+  createBlog: PropTypes.func.isRequired
 }
 
 export default Newblog
