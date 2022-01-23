@@ -29,24 +29,24 @@ const Blog = ({ blog, user, handleLikes, handleBlogRemove }) => {
   return(
     <div>
       {detail
-        ? <div className="box">
+        ? <div className="box long">
           <div>
             {blog.title}
-            <input id="boxButton" type="button" value="hide" onClick={toggleDetail} />
+            <button className="boxButton" onClick={toggleDetail}>hide</button>
           </div>
           <div>{blog.url}</div>
           <div>
-              Likes: {blog.likes}
-            <input type="button" value="like" onClick={handleUpdateLikes} />
+            Likes: {blog.likes}
+            <button onClick={handleUpdateLikes}>like</button>
           </div>
           <div>{blog.author}</div>
           {userCondition &&
-              <button onClick={handleRemove}>remove</button>
+            <button onClick={handleRemove}>remove</button>
           }
         </div>
-        : <div className="box">
+        : <div className="box short">
           {blog.title}, by {blog.author}
-          <input id="boxButton" type="button" value="show" onClick={toggleDetail} />
+          <button className="boxButton show" onClick={toggleDetail}>show</button>
         </div>
       }
     </div>

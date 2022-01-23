@@ -22,7 +22,7 @@ input[type="button"] {
   margin-left: 0.5em;
 }
 
-#boxButton {
+.boxButton {
   float: right;
 }
 

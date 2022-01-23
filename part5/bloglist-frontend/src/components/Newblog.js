@@ -19,11 +19,12 @@ const Newblog = ({ createBlog }) => {
   }
 
   return (
-    <div>
+    <div className="formDiv">
       <form onSubmit={handleNewPost}>
         <div>
           Title
           <input
+            id="title"
             type="text"
             autoComplete="off"
             name="Title"
@@ -34,6 +35,7 @@ const Newblog = ({ createBlog }) => {
         <div>
           Author
           <input
+            id="author"
             type="text"
             autoComplete="off"
             name="Author"
@@ -44,6 +46,7 @@ const Newblog = ({ createBlog }) => {
         <div>
           URL
           <input
+            id="url"
             type="text"
             autoComplete="off"
             name="URL"
