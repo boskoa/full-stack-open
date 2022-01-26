@@ -17,6 +17,7 @@ const Login = ({ handleLogin }) => {
       <div>
         username
         <input
+          id="username"
           type="text"
           name="Username"
           autoFocus
@@ -27,6 +28,7 @@ const Login = ({ handleLogin }) => {
       <div>
         password
         <input
+          id="password"
           type="text"
           name="Password"
           autoComplete="off"
@@ -34,7 +36,7 @@ const Login = ({ handleLogin }) => {
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <input type="submit" value="login" />
+      <input id="login" type="submit" value="login" />
     </form>
   )
 }

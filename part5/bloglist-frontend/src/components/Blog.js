@@ -29,14 +29,14 @@ const Blog = ({ blog, user, handleLikes, handleBlogRemove }) => {
   return(
     <div>
       {detail
-        ? <div className="box long">
+        ? <div className="box long detailed">
           <div>
             {blog.title}
             <button className="boxButton" onClick={toggleDetail}>hide</button>
           </div>
           <div>{blog.url}</div>
           <div>
-            Likes: {blog.likes}
+            Likes: <span className="likesNum">{blog.likes}</span>
             <button onClick={handleUpdateLikes}>like</button>
           </div>
           <div>{blog.author}</div>

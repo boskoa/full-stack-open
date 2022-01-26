@@ -104,14 +104,14 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div id="mainContainer">
       <h2>blogs</h2>
       <Notification message={message} />
       {user
         ? <div>
           <p>
             {user.name} is logged in
-            <input type="button" value="log out" onClick={handleLogout} />
+            <input id="logout" type="button" value="log out" onClick={handleLogout} />
           </p>
           <Togglable buttonLabel="create" ref={blogFormRef}>
             <Newblog createBlog={handleNewBlog} />
