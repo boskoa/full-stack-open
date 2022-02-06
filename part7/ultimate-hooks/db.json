@@ -1,0 +1,48 @@
+{
+  "notes": [
+    {
+      "content": "custom-hooks are grat",
+      "id": 1
+    },
+    {
+      "content": "the best featrure ever <3",
+      "id": 2
+    },
+    {
+      "content": "Not so grat",
+      "id": 7
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "kaltsoon",
+      "number": "045-2323456",
+      "id": 2
+    },
+    {
+      "name": "Oblo",
+      "number": "98765/545231-3213",
+      "id": 3
+    },
+    {
+      "name": "Kocko",
+      "number": "545/645631-654354",
+      "id": 4
+    },
+    {
+      "name": "Šećo",
+      "number": "4356456456",
+      "id": 5
+    },
+    {
+      "name": "Miljenko",
+      "number": "5643/54-43543",
+      "id": 6
+    }
+  ]
+}
