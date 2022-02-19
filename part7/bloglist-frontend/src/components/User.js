@@ -10,10 +10,12 @@ const User = ({ users }) => {
 
   return(
     <div>
-      <h3>{userFound.name}</h3>
+      <h3 style={{ color: 'orange' }}>{userFound.name}</h3>
       {userFound.blogs.map(blog => {
         return <p key={blog.id}>
-          <Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</Link>
+          <Link to={`/blogs/${blog.id}`} style={{ color: 'orange' }}>
+            {blog.title} by {blog.author}
+          </Link>
         </p>
       })}
     </div>

@@ -30,9 +30,7 @@ const update = async (updatedObject) => {
 
 const comment = async (commentedObject) => {
   const endpoint = `${baseUrl}/${commentedObject.id}/comments`
-  console.log('ENDPOINT', endpoint)
   const response = await axios.post(endpoint, commentedObject)
-  console.log('SERVICE', response.data)
   return response.data
 }
 

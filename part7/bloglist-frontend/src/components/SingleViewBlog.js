@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Comments from './Comments'
+import { Card, CardContent, Button } from '@material-ui/core'
 
 const SingleViewBlog = ({
   blogs,
@@ -34,21 +35,38 @@ const SingleViewBlog = ({
   }
 
   return(
-    <div>
-      <div className="box long detailed">
-        <div>
-          {blog.title}
-        </div>
-        <div>{blog.url}</div>
-        <div>
-        Likes: <span className="likesNum">{blog.likes}</span>
-          <button onClick={handleUpdateLikes}>like</button>
-        </div>
-        <div>{blog.author}</div>
-        {userCondition && <button onClick={handleRemove}>remove</button>}
+    <Card elevation={0} style={{ backgroundColor: 'transparent' }}>
+      <div className="long detailed">
+        <Card style={{ backgroundColor: 'lightgreen', margin: '1em' }}>
+          <CardContent>
+            <div>
+              {blog.title}
+            </div>
+            <div>{blog.url}</div>
+            <div>
+              <span>Likes: </span>
+              <span className="likesNum" style={{ marginRight: '1em' }}>{blog.likes}</span>
+              <Button
+                onClick={handleUpdateLikes}
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{ maxHeight: '18px', maxWidth: '20px' }}
+              >like</Button>
+            </div>
+            <div>{blog.author}</div>
+            {userCondition && <Button
+              onClick={handleRemove}
+              variant="contained"
+              color="primary"
+              size="small"
+              style={{ maxHeight: '18px', maxWidth: '20px' }}
+            >remove</Button>}
+          </CardContent>
+        </Card>
       </div>
       <Comments blog={blog} handleComments={handleComments} />
-    </div>
+    </Card>
   )
 }
 

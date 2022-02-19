@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { TextField, Button } from '@material-ui/core'
 
 const Newblog = ({ createBlog }) => {
   const [title, setTitle] = useState('')
@@ -20,41 +21,60 @@ const Newblog = ({ createBlog }) => {
 
   return (
     <div className="formDiv">
-      <form onSubmit={handleNewPost}>
+      <form onSubmit={handleNewPost}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          margin: '1em',
+          padding: '1em',
+          backgroundColor: 'lightgreen',
+          borderRadius: '5px',
+          alignItems: 'center'
+        }}>
         <div>
-          Title
-          <input
+          <TextField
             id="title"
             type="text"
             autoComplete="off"
+            label="Enter title"
+            color="secondary"
             name="Title"
             value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
         <div>
-          Author
-          <input
+          <TextField
             id="author"
             type="text"
             autoComplete="off"
+            label="Enter author"
+            color="secondary"
             name="Author"
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div>
-          URL
-          <input
+          <TextField
             id="url"
             type="text"
             autoComplete="off"
+            label="Enter URL"
+            color="secondary"
             name="URL"
             value={url}
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <input id="submitBlog" type="submit" value="create" />
+        <Button
+          id="submitBlog"
+          type="submit"
+          variant="outlined"
+          color="primary"
+          size="small"
+          style={{ margin: '1em' }}
+        >create</Button>
       </form>
     </div>
   )

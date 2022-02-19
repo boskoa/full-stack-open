@@ -1,22 +1,24 @@
 import React from 'react'
 import Blog from './Blog'
+import { Grid } from '@material-ui/core'
 
 const Blogs = ({ blogs, user, handleLikes, handleBlogRemove }) => {
-  console.log('BLOGS', blogs, user)
   return(
-    <div>
+    <Grid container spacing={5}>
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            user={user}
-            handleLikes={handleLikes}
-            handleBlogRemove={handleBlogRemove}
-          />
+          <Grid item xs={12} sm={6} md={4}
+            key={blog.id || Math.floor(Math.random() * 1000)}>
+            <Blog
+              blog={blog}
+              user={user}
+              handleLikes={handleLikes}
+              handleBlogRemove={handleBlogRemove}
+            />
+          </Grid>
         ))}
-    </div>
+    </Grid>
   )
 }
 
