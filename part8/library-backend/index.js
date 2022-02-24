@@ -1,6 +1,19 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, gql, UserInputError } = require('apollo-server')
+const mongoose = require('mongoose')
+const config = require('./utils/config')
+const Book = require('./models/book')
+const Author = require('./models/author')
 const { v1: uuid } = require('uuid')
 
+mongoose.connect(config.MONGODB_URI)
+  .then(() => {
+    console.log('Connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('Error connecting to MongoDB', error.message)
+  })
+
+/*
 let authors = [
   {
     name: 'Robert Martin',
@@ -78,12 +91,13 @@ let books = [
     genres: ['classic', 'revolution']
   },
 ]
+*/
 
 const typeDefs = gql`
   type Book {
     title: String!
     published: Int!
-    author: String!
+    author: Author!
     id: ID!
     genres: [String!]!
   }
@@ -92,7 +106,7 @@ const typeDefs = gql`
     name: String!
     born: Int
     id: ID!
-    bookCount: Int
+    bookCount: Int!
   }
 
   type Query {
@@ -118,51 +132,73 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (root, args) => {
-      if (args) {
-        if (args.genre && args.author) {
-          return books.filter(b => b.genres.includes(args.genre))
-            .filter(b => b.author === args.author)
-        } else if (args.genre) {
-          return books.filter(b => b.genres.includes(args.genre))
-        } else if (args.author) {
-          return books.filter(b => b.author === args.author)
-        }
+    bookCount: async () => Book.collection.countDocuments(),
+    authorCount: async () => Author.collection.countDocuments(),
+    allBooks: async (root, args) => {
+      let author = null
+      if (args.author) {
+        author = await Author.findOne({ name: args.author })
       }
-
-      return books
+      let filter = {}
+      if (args.genre && args.author) {
+        filter = { genres: { $in: args.genre }, author: author.id }
+      } else if (args.genre) {
+        filter = { genres: { $in: args.genre } }
+      } else if (args.author) {
+        filter = { author: author.id }
+      }
+      return await Book.find(filter).populate('author')
     },
-    allAuthors: () => authors
+    allAuthors: async () => await Author.find({})
   },
 
   Author: {
-    bookCount: (root) => {
-      return books.filter(b => b.author === root.name).length
+    bookCount: async (root) => {
+      const books = await Book.find({ author: root.id })
+      return books.length
     }
   },
 
   Mutation: {
-    addBook: (root, args) => {
-      if (!authors.find(a => a.name === args.author)) {
-        authors = authors.concat({ name: args.author, id: uuid() })
+    addBook: async (root, args) => {
+      let author = await Author.findOne({ name: args.author })
+      if (!author) {
+        author = new Author({ name: args.author, id: uuid(), bookCount: 0 })
+        try {
+          await author.save()
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args
+          })
+        }
       }
 
-      const book = { ...args, id: uuid() }
-      books = books.concat(book)
+      const book = new Book({ ...args, author: author, id: uuid() })
+      try {
+        await book.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args
+        })
+      }
+
       return book
     },
-    editAuthor: (root, args) => {
-      const author = authors.find(a => a.name === args.name)
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name })
 
       if (!author) {
         return null
       }
 
-      const updatedAuthor = { ...author, born: args.setBornTo}
-      authors = authors.map(a => a.name !== author.name ? a : updatedAuthor)
-      return updatedAuthor
+      author.born = args.setBornTo
+      try {
+        author.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args
+        })
+      }
     }
   }
 }
