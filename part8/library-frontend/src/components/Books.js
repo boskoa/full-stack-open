@@ -25,7 +25,6 @@ const Books = (props) => {
   return (
     <div>
       <h2>books</h2>
-
       <table>
         <tbody>
           <tr>
@@ -46,6 +45,7 @@ const Books = (props) => {
         {uniqueGenres.map(g => {
           return <button key={g} onClick={() => setFilter(g)}>{g}</button>
         })}
+        <button onClick={() => setFilter('')}>all genres</button>
       </div>
     </div>
   )

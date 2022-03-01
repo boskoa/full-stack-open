@@ -256,6 +256,12 @@ const resolvers = {
       return user
     },
     login: async (root, args) => {
+      if (!args.username || !args.password) {
+        throw new UserInputError('username or password is missing', {
+          invalidArgs: args
+        })
+      }
+
       const user = await User.findOne({ username: args.username })
 
       if (!user || args.password !== 'secret') {
@@ -281,7 +287,6 @@ const server = new ApolloServer({
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
       const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET)
       const currentUser = await User.findById(decodedToken.id)
-
       return { currentUser }
     }
   }
