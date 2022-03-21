@@ -1,66 +1,98 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const ALL_AUTHORS = gql`
-query {
-  allAuthors {
-    name
-    born
-    bookCount
-  }
-}
-`
-
-export const ALL_BOOKS = gql`
-query($genre: String) {
-  allBooks(genre: $genre) {
-    title
-    published
-    author {
-      name
-    }
-    genres
-  }
-}
-`
-
-export const ADD_BOOK = gql`
-mutation($title: String!, $published: Int!, $author: String!, $genres: [String!]!) {
-  addBook(title: $title, published: $published, author: $author, genres: $genres) {
-    title
-    published
-    author {
+  query {
+    allAuthors {
       name
       born
       bookCount
       id
     }
-    genres
   }
-}
+`
+
+export const ALL_BOOKS = gql`
+  query ($genre: String, $author: String) {
+    allBooks(genre: $genre, author: $author) {
+      title
+      author {
+        name
+        born
+        id
+      }
+      published
+      genres
+      id
+    }
+  }
+`
+
+export const ADD_BOOK = gql`
+  mutation (
+    $title: String!
+    $author: String!
+    $published: Int!
+    $genres: [String]!
+  ) {
+    addBook(
+      title: $title
+      author: $author
+      published: $published
+      genres: $genres
+    ) {
+      title
+      author {
+        name
+        born
+        id
+      }
+      published
+      genres
+      id
+    }
+  }
 `
 
 export const EDIT_AUTHOR = gql`
-mutation($name: String!, $setBornTo: Int!) {
-  editAuthor(name: $name, setBornTo: $setBornTo) {
-    name
-    born
+  mutation ($name: String!, $born: Int!) {
+    editAuthor(name: $name, born: $born) {
+      name
+      born
+      id
+    }
   }
-}
 `
 
 export const LOGIN = gql`
-mutation($username: String!, $password: String!) {
-  login(username: $username, password: $password) {
-    value
+  mutation ($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      value
+    }
   }
-}
 `
 
 export const ME = gql`
-query {
-  me {
-    username
-    favouriteGenre
+  query {
+    me {
+      username
+      favouriteGenre
+      id
+    }
   }
-}
+`
+
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      title
+      author {
+        name
+        born
+        id
+      }
+      published
+      genres
+      id
+    }
+  }
 `

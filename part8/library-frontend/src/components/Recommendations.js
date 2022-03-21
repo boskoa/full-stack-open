@@ -1,45 +1,41 @@
-import { useLazyQuery, useQuery } from '@apollo/client'
-import React, { useEffect, useState } from 'react'
-import { ALL_BOOKS, ME } from "../queries"
+import { useLazyQuery } from '@apollo/client'
+import { useState, useEffect } from 'react'
+import { ALL_BOOKS, ME } from '../queries'
 
-const Recommendations = ({ show }) => {
-  const currentUser = useQuery(ME, {
-    fetchPolicy: 'no-cache',
+const Recommendations = (props) => {
+  const [getMe, me] = useLazyQuery(ME, {
+    fetchPolicy: 'cache-first',
   })
-  const [user, setUser] = useState({})
-  const [recommendedBooks, resultBooks] = useLazyQuery(ALL_BOOKS)
-  const [booksToRecommend, setBooksToRecommend] = useState([])
+  const [getResultBooks, resultBooks] = useLazyQuery(ALL_BOOKS)
+  const [currentUser, setCurrentUser] = useState(null)
+  const [favouriteGenre, setFavouriteGenre] = useState(null)
 
   useEffect(() => {
-    if (currentUser.data && currentUser.data.me) {
-      setUser(currentUser.data.me)
+    if (props.show) {
+      getMe()
     }
-  }, [currentUser])
+  }, [getMe, props.show])
 
   useEffect(() => {
-    if (user) {
-      recommendedBooks({ variables: { genre: user.favouriteGenre } })
+    if (me.data && me.data.me) {
+      setCurrentUser(me.data.me)
+      setFavouriteGenre(me.data.me.favouriteGenre)
+      getResultBooks({ variables: { genre: me.data.me.favouriteGenre } })
     }
-  }, [user, recommendedBooks])
+  }, [me.data, currentUser, getResultBooks])
 
-  useEffect(() => {
-    if (resultBooks.data) {
-      setBooksToRecommend(resultBooks.data.allBooks)
-    }
-  }, [resultBooks])
+  if (me.loading) {
+    return <div />
+  }
 
-  if (!show) {
+  if (!props.show) {
     return null
   }
 
-  if(currentUser.loading) {
-    return <div>User loading...</div>
-  }
-
-  return(
+  return (
     <div>
       <h2>recommendations</h2>
-      <p>books in your favourite genre {currentUser.data.me.favouriteGenre}</p>
+      <p>books in your favourite genre {favouriteGenre}</p>
       <table>
         <tbody>
           <tr>
@@ -47,13 +43,14 @@ const Recommendations = ({ show }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {booksToRecommend.map((a) => (
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
-            </tr>
-          ))}
+          {resultBooks.data &&
+            resultBooks.data.allBooks.map((a) => (
+              <tr key={a.title}>
+                <td>{a.title}</td>
+                <td>{a.author.name}</td>
+                <td>{a.published}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

@@ -1,16 +1,15 @@
-import { useMutation } from "@apollo/client"
-import { useEffect, useState } from "react"
-import { LOGIN, ME } from "../queries"
+import { useMutation } from '@apollo/client'
+import { useEffect, useState } from 'react'
+import { LOGIN, ME } from '../queries'
 
-const LoginForm = ({ setToken, setPage, show }) => {
+const LoginForm = ({ setToken }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-
   const [login, result] = useMutation(LOGIN, {
     onError: (error) => {
       console.log(error.graphQLErrors[0].message)
     },
-    refetchQueries: [{ query: ME }]
+    refetchQueries: [{ query: ME }],
   })
 
   useEffect(() => {
@@ -19,22 +18,14 @@ const LoginForm = ({ setToken, setPage, show }) => {
       setToken(token)
       localStorage.setItem('library-user-token', token)
     }
-  }, [result.data]) //eslint-disable-line
-
-  if (!show) {
-    return <div />
-  }
+  }, [result.data]) // eslint-disable-line
 
   const submit = async (event) => {
     event.preventDefault()
 
     login({
-      variables: { username, password }
+      variables: { username, password },
     })
-
-    setPage('authors')
-    setUsername('')
-    setPassword('')
   }
 
   return (
