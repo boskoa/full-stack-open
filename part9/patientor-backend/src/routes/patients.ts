@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import express from 'express';
 import patientService from '../services/patientService';
-import toNewPatientEntry from '../utils';
+import toNewPatientEntry, { toNewEntry } from '../utils';
 
 const router = express.Router();
 
@@ -26,4 +26,17 @@ router.post('/', (req, res) => {
   res.json(addedPatient);
 });
 
-export default router;
+router.post('/:id/entries', (req, res) => {
+  const newEntry = toNewEntry(req.body);
+  const patient = patientService.findById(req.params.id);
+
+  if (!newEntry || !patient) {
+    throw new Error('Missing patient and/or wrong entry.');
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  const updatedPatient = patientService.addEntry(newEntry, patient);
+
+  res.json(updatedPatient);
+});
+
+export default router;//

@@ -9,3 +9,5 @@ Some of the things to watch out for (which I haven't forgot):
 - Don't use the default Authorization header (with a capital "A") in Apollo Studio Explorer.
 - Don't use quotiation marks in its value ("bearer ey...").
 ----
+#### Part 9 done during the 2022 course. Exercises 9.1-9.25. (last 2 not done - all entry types).
+----
